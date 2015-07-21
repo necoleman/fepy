@@ -46,13 +46,18 @@ def assembleMatrices( tri ):
 def eigenvalues(L,M):
 
     ev,ef = lin.eigh(L,M)
-#    ev = list(ev)
-#    ef = list(ef)
-#    eig = [list(x) for x in zip(*sorted(zip(ev, ef), key=lambda pair: pair[0]))]
     return ev,ef
 
+# change to test git
+
 # use sparse arnoldi solver to find first n eigenvalues of Lx = nMx
-def sparseEigs(L,M,n=2):
+def sparseEigs(L,M,n=15):
 
     evals,evecs = eigsh(L,n,M,sigma=0.01,which='LM')
+    return evals,evecs
+
+def findEigs(mesh,n):
+    L,M = assembleMatrices(mesh)
+    evals,evecs = sparseEigs(L,M,n)
+
     return evals,evecs
