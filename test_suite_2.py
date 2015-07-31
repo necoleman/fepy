@@ -52,7 +52,7 @@ def compareSparseDense():
 
 def sparseTime():
 	meshAreas = []
-	for k in range(100):
+	for k in range(1):
 		meshAreas.append(0.0001 + 0.00001*k)
 
 	domain = common_meshes.square(1)
