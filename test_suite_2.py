@@ -55,12 +55,15 @@ def sparseTime():
 	for k in range(1):
 		meshAreas.append(0.0001 + 0.00001*k)
 
+		meshAreas.append(0.001 + 0.0001*k)
+
 	domain = common_meshes.square(1)
 	mesh_count = []
 	assemble_time = []
 	eig_time = []
 	lambda1 = []
-	
+
+	eig = []
 
 	for h in meshAreas:
 		mesh = triangle.triangulate(domain,'qa'+str(h))
@@ -72,14 +75,16 @@ def sparseTime():
 		assemble_time.append(finish_assemble - start_assemble)
 
 		start_sparse = time.time()
-		e_sparse = FE.sparseEigs(L,M)
+		eig = FE.findEigs(mesh,15)
 		finish_sparse = time.time()
 		eig_time.append(finish_sparse - start_sparse)
 
-		lambda1.append(e_sparse[0][1])
+		lambda1.append(eig[0][1])
 
 	for k in range(len(meshAreas)):
 		print mesh_count[k], assemble_time[k], eig_time[k], lambda1[k]
+
+	print eig
 
 if __name__ == '__main__':
 	sparseTime()
