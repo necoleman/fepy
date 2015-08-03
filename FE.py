@@ -1,8 +1,8 @@
 from scipy import linalg as lin
 from scipy.sparse.linalg import eigsh
 import numpy as np
-from Mesh import *
 import itertools
+import time
 
 # assemble the FE matrices from a mesh
 # v = list of vertices
@@ -58,7 +58,9 @@ def sparseEigs(L,M,n=15):
 
 
 def findEigs(mesh,n):
+    start = time.time()
     L,M = assembleMatrices(mesh)
     evals,evecs = sparseEigs(L,M,n)
-
+    finish = time.time()
+    print '             time: ' + str(finish - start)
     return evals,evecs
