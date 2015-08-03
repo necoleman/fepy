@@ -27,7 +27,7 @@ class FEGui:
 		self.current_refine = 1
 
 		# set up the domain
-		self.dom = {'vertices':exnp.array([[0.,0.],[1.,0.7],[0.5,0.5]])}
+		self.dom = {'vertices':np.array([[0.,0.],[1.,0.7],[0.5,0.5]])}
 		self.mesh = triangle.triangulate(self.dom,'qa0.001')
 		x = self.mesh['vertices'][:,0]
 		y = self.mesh['vertices'][:,1]
@@ -82,14 +82,14 @@ class FEGui:
 	def keyEvent(self,event):
 		print event.key
 		if event.key == 'r':
-			self.refine(event)
+			self.refine()
 		if event.key == 'c':
-			self.coarsen(event)
+			self.coarsen()
 		if event.key == 'up':
-			self.energy_up(event)
+			self.energy_up()
 			print 'up'
 		if event.key == 'down':
-			self.energy_down(event)
+			self.energy_down()
 		if event.key == ' ':
 			self.redraw()
 
