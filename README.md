@@ -21,7 +21,7 @@ Next steps:
 
 - FE.py: Main attraction. Code for assembling finite element matrices and computing the eigenvalues/eigenfunctions of the Neumann Laplacian
 - test suites: code for testing FE
-- common_meshes.py: What it says on the box
+- common_meshes.py: meshes for common testing domains
 - gui.py: GUI, currently not working. Hopefully get to this first thing next semester.
 - Applications/ (please be warned: code here is not well-commented and depends on importing FE.py)
   - fun_shapes.py: computing and displaying eigenvalues/eigenfunctions of the Facebook cover photo shape
