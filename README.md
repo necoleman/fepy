@@ -10,8 +10,8 @@ Useful: Matplotlib, tkinter.
 
 Next steps:
 
--[ ] GUI for drawing & working with planar domains
+- [ ] GUI for drawing & working with planar domains
 
--[ ] Adaptive mesh refinement
-  -[ ] Nodal sets
-  -[ ] Controlling geometric sources of error
+- [ ] Adaptive mesh refinement
+  - [ ] Nodal sets
+  - [ ] Controlling geometric sources of error
