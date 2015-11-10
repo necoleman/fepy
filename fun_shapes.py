@@ -35,11 +35,11 @@ evals, evecs = FE.findEigs(mesh,50)
 X = mesh['vertices'][:,0]
 Y = mesh['vertices'][:,1]
 
-v = evecs[:,27]
+v = evecs[:,45]
 
 fig = plt.figure()
 ax = fig.add_subplot(111,aspect='equal')
-ax.tricontourf(X,Y,v,500,cmap='coolwarm')
+ax.tricontourf(X,Y,v,0,cmap='copper')
 #ax.triplot(tri.Triangulation(t['vertices'][:,0],d['vertices'][:,1]))
 #ax.tricontourf(X,Y,v,levels=[-1e9,0,1e9],cmap='gray')
 plt.show()

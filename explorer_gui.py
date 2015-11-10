@@ -43,7 +43,7 @@ class Explorer:
 
 
 	def plotCurrentDomain(self):
-		
+		return
 
 	
 
@@ -53,4 +53,6 @@ class Explorer:
 		root.destroy()
 
 if __name__ == '__main__':
+	root = Tk()
+	
 

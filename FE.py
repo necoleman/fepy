@@ -7,6 +7,8 @@ import time
 # assemble the FE matrices from a mesh
 # v = list of vertices
 # f = list of triangles
+
+# (mesh format: {'vertices':numpy array, 'triangles':numpy array}
 def assembleMatrices( tri ):
 
     v = tri['vertices']
@@ -43,16 +45,27 @@ def assembleMatrices( tri ):
 
     return L, M
 
-def eigenvalues(L,M):
+def assembleDirichlet( tri ):
+    L, M = assembleMatrices(tri)
+    n = len( tri['vertices'] )
+    for x in tri['segments']:
+        i = x[0]
+        L[i,:] = np.zeros(n)
+        L[:,i] = np.zeros(n)
+        M[i,:] = np.zeros(n)
+        M[:,i] = np.zeros(n)
+        L[i,i] = 1.0
+	return L,M
 
+# this finds eigenvalues using a *dense* 
+def eigenvalues(L,M):
     ev,ef = lin.eigh(L,M)
     return ev,ef
-
-# change to test git
 
 # use sparse arnoldi solver to find first n eigenvalues of Lx = nMx
 def sparseEigs(L,M,n=15):
 
+    # 
     evals,evecs = eigsh(L,n,M,sigma=0.01,which='LM')
     return evals,evecs
 
