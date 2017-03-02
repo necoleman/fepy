@@ -8,15 +8,23 @@ import time
 # v = list of vertices
 # f = list of triangles
 # 
-# (mesh format: {'vertices':numpy array, 'triangles':numpy array}
+# mesh format: 
+#       {'vertices': np.array([[v0, v1], [v2, v3],...]),
+#        'triangles': np.array([[0, 1, 2], [3, 4, 5], ...]),
+#        'segments': np.array([[0, 1], [2, 3]])}
+#
 # returns the two matrices in the finite-element eigenvalue equation
 #
 # Lx = uMx
 #
-# L is the matrix of the weak Laplacian, whose elements are inner products of gradients of the finite elements
-# M is the matrix of the L^2 inner product, whose elements are the L^2 inner products of the finite elements
+# L is the matrix of the weak Laplacian, whose elements are inner products of
+# gradients of the finite elements
+# M is the matrix of the L^2 inner product, whose elements are the L^2 inner
+# products of the finite elements
 #
-# NB this is defined with *piecewise-linear* elements over *triangular* meshes. For something more sophisticated, you're going to have to go to the professionals at Deal.II, FEnics, or PyDec.
+# NB this is defined with *piecewise-linear* elements over *triangular* meshes.
+# For something more sophisticated, you're going to have to go to the
+# professionals at Deal.II, FEnics, or PyDec.
 def assembleMatrices( tri ):
 
     # list the vertices
@@ -35,7 +43,8 @@ def assembleMatrices( tri ):
     # L^2 inner product
     M = np.zeros( (n,n) )
 
-    # now loop over each triangle in the mesh and add the submatrix corresponding to the face
+    # now loop over each triangle in the mesh and add the submatrix
+    # corresponding to the face
     for t in f:
         # set up a dict that remembers which vertex is zeroth, first, second
         d = {t[0]:0,t[1]:1,t[2]:2}
@@ -49,7 +58,8 @@ def assembleMatrices( tri ):
         area = np.abs( np.cross(v2-v0, v1-v0) )/2.0
 
         # barycentric embedding matrix for the triangle
-        A = np.array( [[v0[0], v1[0], v2[0]], [v0[1], v1[1], v2[1]], [1., 1., 1.]] )
+        A = np.array([[v0[0], v1[0], v2[0]],
+                     [v0[1], v1[1], v2[1]], [1., 1., 1.]])
 
         # invert to find the coordinates of the gradients of the
         # elements
@@ -84,16 +94,15 @@ def assembleDirichlet( tri ):
     L, M = assembleMatrices(tri)
     n = len( tri['vertices'] )
 
-    # the idea is to set the appropriate rows and columns of the Laplacian and the L^2 inner product matrices to zero
-    # (but I need to double-check that I'm approaching it correctly!)
+    # set the appropriate rows  of the Laplacian and the 
+    # L^2 inner product matrices to zero
     for x in tri['segments']:
         i = x[0]
         L[i,:] = np.zeros(n)
-        L[:,i] = np.zeros(n)
         M[i,:] = np.zeros(n)
-        M[:,i] = np.zeros(n)
         L[i,i] = 1.0
-	return L,M
+
+    return L,M
 
 # this finds *all* possible eigenvalues using a *dense* solver
 # avoid --- it is very expensive for large meshes 
@@ -114,13 +123,17 @@ def sparseEigs(L,M,n=15):
 # this method takes in a mesh and a number n
 # and returns the first n eigenvalues/vectors of that mesh
 # as a bonus, it also prints how long it took to stdout
-def findEigs(mesh,n):
-
+def findEigs(mesh, n, bc='Neumann', verbose=False):
     # start the timer
     start = time.time()
 
     # build the matrices
-    L,M = assembleMatrices(mesh)
+    if bc is 'Neumann':
+        L,M = assembleMatrices(mesh)
+    elif bc is 'Dirichlet':
+        L,M = assembleDirichlet(mesh)
+    else:
+        print("Sorry! Not valid boundary conditions!")
 
     # find the eigenvalues and eigenvectors
     evals,evecs = sparseEigs(L,M,n)
@@ -129,7 +142,8 @@ def findEigs(mesh,n):
     finish = time.time()
 
     # print the results
-    print '             time: ' + str(finish - start)
+    if verbose:
+        print('             time: ' + str(finish - start))
 
     # return the finished product
     return evals,evecs
